@@ -44,7 +44,7 @@ stages:
   displayName: 'Deploy the container'
   dependsOn: Build
   jobs:
-  - deployment: Deploy
+  - deployment: d2ploy
     displayName: Deploy job
     pool:
       vmImage: 'ubuntu-20.04'
