@@ -27,6 +27,16 @@ stages:
         containerRegistry: 'Container Registry Connection'
         tags: |
           $(tag)
+    - task: aquasecScanner@4
+      inputs:
+        image: '$(webRepository)'
+        scanType: 'hosted'
+        register: false
+        hideBase: false
+        showNegligible: false
+        windowsScannerVersion: '6.5.0'
+        registry: 'Container Registry Connection'
+        connection: 'aquascanner'
     - task: Docker@2
       displayName: 'Build and push the leaderboard image to container registry'
       inputs:
@@ -37,6 +47,7 @@ stages:
         containerRegistry: 'Container Registry Connection'
         tags: |
           $(tag)
+    
     - publish: '$(Build.SourcesDirectory)/manifests'
       artifact: manifests
 
