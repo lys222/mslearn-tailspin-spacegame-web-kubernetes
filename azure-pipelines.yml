@@ -44,8 +44,8 @@ stages:
   displayName: 'Deploy the container'
   dependsOn: Build
   jobs:
-  - deployment: deploy_2
-    displayName: Deploy job
+  - deployment: depl0y
+    displayName: depl0y job
     pool:
       vmImage: 'ubuntu-20.04'
     environment: 'spike.default'
@@ -55,6 +55,8 @@ stages:
       runOnce:
         deploy:
           steps:
+          - download: current
+            artifact: manifests
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
             inputs:
