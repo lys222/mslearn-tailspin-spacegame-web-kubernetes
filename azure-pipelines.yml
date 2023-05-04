@@ -41,12 +41,12 @@ stages:
     - publish: '$(Build.SourcesDirectory)/manifests'
       artifact: manifests
 
-- stage: 'Dev'
+- stage: 'Deploy'
   displayName: 'Deploy the container'
   dependsOn: Build
   jobs:
   - deployment: Deploy
-    displayName: depl0y job
+    displayName: Deploy
     pool:
       vmImage: 'ubuntu-18.04'
     environment: 'spike.default'
