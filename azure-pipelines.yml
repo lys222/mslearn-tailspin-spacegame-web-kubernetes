@@ -45,10 +45,10 @@ stages:
   displayName: 'Deploy the container'
   dependsOn: Build
   jobs:
-  - deployment: depl0y
+  - deployment: Deploy
     displayName: depl0y job
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-18.04'
     environment: 'spike.default'
     variables:
     - group: Release
