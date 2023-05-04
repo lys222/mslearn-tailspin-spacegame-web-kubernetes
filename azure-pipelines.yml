@@ -35,15 +35,6 @@ stages:
     - bash: |
         docker pull $(webRepository)
       displayName: Pull Docker image
-    - task: aquasecScanner@4
-      inputs:
-        image: '$(webRepository)'
-        scanType: 'local'
-        register: false
-        hideBase: false
-        showNegligible: false
-        connection: 'aquascanner'
-        runOptions: '--token 3e20afc9-1aeb-4882-8fa4-878265c3b7d8'
 
     - task: Docker@2
       displayName: 'Build and push the leaderboard image to container registry'
