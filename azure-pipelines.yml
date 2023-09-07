@@ -37,6 +37,9 @@ stages:
         containerRegistry: 'acr222'
         tags: |
           $(tag)
+
+    - task: MicrosoftSecurityDevOps@1
+      displayName: 'Microsoft Security DevOps'
     
     - publish: '$(Build.SourcesDirectory)/manifests'
       artifact: manifests
