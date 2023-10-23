@@ -46,14 +46,13 @@ stages:
 
     - task: aquasecScanner@4
       inputs:
-        image: ''
-        scanType: 'hosted'
+        image: '$(leaderboardRepository)'
+        scanType: 'local'
         containerRuntime: 'docker'
         register: false
         hideBase: false
         showNegligible: true
         windowsScannerVersion: '6.5.0'
-        registry: 'acr222'
         connection: 'aqua'
         
 - stage: 'Deploy'
