@@ -43,8 +43,15 @@ stages:
     
     - publish: '$(Build.SourcesDirectory)/manifests'
       artifact: manifests
+
+    - task: Docker@2
+      displayName: Aqua Registry Login
+      inputs:
+        containerRegistry: 'aqua-registry'
+        command: login
+
     - task: CmdLine@2
-      displayName: Scan
+      displayName: Aqua Scanner Scan
       inputs:
         script: | 
           docker run -d registry.aquasec.com/scanner:2022.4.424 daemon --user administrator --password Qwer1234!@#$ --host 20.214.90.194:8443
