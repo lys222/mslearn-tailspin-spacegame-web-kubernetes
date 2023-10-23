@@ -46,7 +46,7 @@ stages:
 
     - task: aquasecScanner@4
       inputs:
-        image: '$(leaderboardRepository)'
+        image: ''
         scanType: 'hosted'
         containerRuntime: 'docker'
         register: false
