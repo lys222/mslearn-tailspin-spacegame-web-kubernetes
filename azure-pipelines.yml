@@ -56,7 +56,7 @@ stages:
         registry: false
         hideBase: false
         showNegligible: true
-        connection: 'demo-aqua'
+        connection: 'aqua'
         scanner: 'registry.aquasec.com/scanner:6.2.RC2'
                
 - stage: 'Deploy'
