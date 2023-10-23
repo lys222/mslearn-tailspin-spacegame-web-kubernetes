@@ -46,7 +46,6 @@ stages:
 
     - task: aquasecScanner@4
       inputs:
-        image: $(leaderboardRepository)
         scanType: 'local'
         containerRuntime: 'docker'
         register: false
@@ -54,8 +53,8 @@ stages:
         showNegligible: false
         windowsScannerVersion: '6.5.0'
         connection: 'aqua'
-
-
+        
+        
 - stage: 'Deploy'
   displayName: 'Deploy the container'
   dependsOn: Build
