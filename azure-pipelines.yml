@@ -46,12 +46,12 @@ stages:
 
     - task: aquasecScanner@4
       inputs:
+        image: '$(webRepository)'
         scanType: 'local'
         containerRuntime: 'docker'
-        register: false
+        register: true
         hideBase: false
-        showNegligible: false
-        windowsScannerVersion: '6.5.0'
+        showNegligible: true
         connection: 'aqua'
         
         
