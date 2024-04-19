@@ -3,7 +3,7 @@ trigger:
 
 resources:
   containers:
-  - container: 
+  - container: trivy
     image: aquasec/aqua-scanner
     env:
       AQUA_KEY: $(AQUA_KEY)
@@ -76,6 +76,7 @@ stages:
   dependsOn: Build
   jobs:  
   - job: 'Scan'
+    container: trivy
     displayName: 'Scan by Aqua'
     steps:
     - script: |
