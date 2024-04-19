@@ -3,7 +3,7 @@ trigger:
 
 resources:
   containers:
-  - container:
+  - container: trivy
     image: aquasec/aqua-scanner
     env:
       AQUA_KEY: $(AQUA_KEY)
