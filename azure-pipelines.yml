@@ -29,6 +29,29 @@ stages:
     pool:
       vmImage: 'ubuntu-20.04'
     steps:
+    - task: Bash@3
+      displayName: 'Pipeline Enforcer Start'
+      inputs:
+        targetType: 'inline'
+        script: |
+          curl -sLo install.sh download.codesec.aquasec.com/pipeline-enforcer/install.sh
+          BINDIR="." sh install.sh
+          ACCESS_TOKEN=$(System.AccessToken) ./pipeline-enforcer ci start &
+      env:
+        CSPM_URL: https://asia-1.api.cloudsploit.com
+        AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
+        AQUA_KEY: $(AQUA_KEY)
+        AQUA_SECRET: $(AQUA_SECRET)
+    - task: Bash@3
+      displayName: 'Pipeline Enforcer End'
+      env:
+        AQUA_KEY: $(AQUA_KEY)
+        AQUA_SECRET: $(AQUA_SECRET)
+      inputs:
+        targetType: 'inline'
+        script: |
+          ./pipeline-enforcer ci end
+          
     - task: Docker@2
       displayName: 'Build and push the image to container registry'
       inputs:
