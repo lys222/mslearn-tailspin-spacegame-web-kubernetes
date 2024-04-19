@@ -11,6 +11,7 @@ resources:
       AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
       CSPM_URL: https://asia-1.api.cloudsploit.com
       TRIVY_RUN_AS_PLUGIN: aqua
+      # For http/https proxy configuration add env vars: HTTP_PROXY/HTTPS_PROXY, CA-CRET (path to CA certificate)
 
 variables:
   buildConfiguration: 'Release'
@@ -48,13 +49,6 @@ stages:
         containerRegistry: 'acr222'
         tags: |
           $(tag)
-    - bash: |
-       trivy fs --scanners config,vuln,secret .
-      # To customize which severities to scan for, add the following flag: --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-      # To enable SAST scanning, add: --sast
-      # To enable reachability scanning, add: --reachability
-      # To enable npm/dotnet/gradle non-lock file scanning, add: --package-json / --dotnet-proj / --gradle
-      displayName: Aqua scanner
   
     # - task: Docker@2
     #   displayName: Aqua Registry Login
@@ -76,7 +70,22 @@ stages:
     #     showNegligible: true
     #     connection: 'aqua'
     #     scanner: 'registry.aquasec.com/scanner:6.2.RC2'
-               
+
+- stage: 'Scan'
+  displayName: 'Aqua Scan'
+  jobs:  
+  - job: 'Scan'
+    container: trivy
+    displayName: 'Scan by Aqua'
+    steps:
+    - script: |
+        trivy fs --scanners config,vuln,secret .
+        # To customize which severities to scan for, add the following flag: --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+        # To enable SAST scanning, add: --sast
+        # To enable reachability scanning, add: --reachability
+        # To enable npm/dotnet/gradle non-lock file scanning, add: --package-json / --dotnet-proj / --gradle
+      displayName: Aqua scanner
+
 - stage: 'Deploy'
   displayName: 'Deploy the container'
   dependsOn: Build
