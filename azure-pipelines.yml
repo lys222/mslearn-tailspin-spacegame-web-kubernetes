@@ -21,10 +21,10 @@ variables:
   imagePullSecret: 'secret'
 
 stages:
-- stage: 'Monitor'
+- stage: 'Monitor_Start'
   displayName: 'Activity Monitoring'
   jobs:
-  - job: 'Monitor'
+  - job: 'Monitor_Start'
     steps:
     - task: Bash@3
       displayName: 'Pipeline Enforcer Start'
@@ -39,19 +39,10 @@ stages:
         AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
         AQUA_KEY: $(AQUA_KEY)
         AQUA_SECRET: $(AQUA_SECRET)
-    - task: Bash@3
-      displayName: 'Pipeline Enforcer End'
-      env:
-        AQUA_KEY: $(AQUA_KEY)
-        AQUA_SECRET: $(AQUA_SECRET)
-      inputs:
-        targetType: 'inline'
-        script: |
-          ./pipeline-enforcer ci end
 
 - stage: 'Build'
   displayName: 'Build and push'
-  dependsOn: 'Monitor'
+  dependsOn: 'Monitor_Start'
   jobs:  
   - job: 'Build'
     displayName: 'Build job'
@@ -116,10 +107,25 @@ stages:
         # To enable reachability scanning, add: --reachability
         # To enable npm/dotnet/gradle non-lock file scanning, add: --package-json / --dotnet-proj / --gradle
       displayName: Aqua scanner
+  
+- stage: 'Monitor_End'
+  displayName: 'Activity Monitoring'
+  jobs:
+  - job: 'Scan'
+    steps:
+    - task: Bash@3
+      displayName: 'Pipeline Enforcer End'
+      env:
+        AQUA_KEY: $(AQUA_KEY)
+        AQUA_SECRET: $(AQUA_SECRET)
+      inputs:
+        targetType: 'inline'
+        script: |
+          ./pipeline-enforcer ci end
 
 - stage: 'Deploy'
   displayName: 'Deploy the container'
-  dependsOn: Scan
+  dependsOn: Monitor_End
   jobs:
   - deployment: Deploy
     displayName: Deploy the container
