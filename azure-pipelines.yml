@@ -50,6 +50,10 @@ stages:
         containerRegistry: 'acr222'
         tags: |
           $(tag)
+
+    - publish: '$(Build.SourcesDirectory)/manifests'
+      artifact: manifests
+
     - task: CmdLine@2
       displayName: "Manifest Generation"
       inputs: 
@@ -68,7 +72,7 @@ stages:
               --aqua-key $(AQUA_KEY) \
               --aqua-secret $(AQUA_SECRET) \
               --cspm-url https://asia-1.api.cloudsploit.com \
-              --artifact-path  lys222/$(leaderboardRepository):$(tag)
+              --artifact-path  manifests
             
               # The docker image name:tag of the newly built image
               # --artifact-path  my-image-name:${versionEnv}        
