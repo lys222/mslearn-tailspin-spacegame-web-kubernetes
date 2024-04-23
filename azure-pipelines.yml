@@ -72,7 +72,7 @@ stages:
               --aqua-key $(AQUA_KEY) \
               --aqua-secret $(AQUA_SECRET) \
               --cspm-url https://asia-1.api.cloudsploit.com \
-              --artifact-path  manifests
+              --artifact-path  $(Build.SourcesDirectory)/bin/$(leaderboardRepository)
             
               # The docker image name:tag of the newly built image
               # --artifact-path  my-image-name:${versionEnv}        
