@@ -21,28 +21,8 @@ variables:
   imagePullSecret: 'secret'
 
 stages:
-- stage: 'Monitor_Start'
-  displayName: 'Activity Monitoring'
-  jobs:
-  - job: 'Monitor_Start'
-    steps:
-    - task: Bash@3
-      displayName: 'Pipeline Enforcer Start'
-      inputs:
-        targetType: 'inline'
-        script: |
-          curl -sLo install.sh download.codesec.aquasec.com/pipeline-enforcer/install.sh
-          BINDIR="." sh install.sh
-          ACCESS_TOKEN=$(System.AccessToken) ./pipeline-enforcer ci start &
-      env:
-        CSPM_URL: https://asia-1.api.cloudsploit.com
-        AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
-        AQUA_KEY: $(AQUA_KEY)
-        AQUA_SECRET: $(AQUA_SECRET)
-
 - stage: 'Build'
   displayName: 'Build and push'
-  dependsOn: 'Monitor_Start'
   jobs:  
   - job: 'Build'
     displayName: 'Build job'
@@ -106,26 +86,11 @@ stages:
         # To enable SAST scanning, add: --sast
         # To enable reachability scanning, add: --reachability
         # To enable npm/dotnet/gradle non-lock file scanning, add: --package-json / --dotnet-proj / --gradle
-      displayName: Aqua scanner
-  
-- stage: 'Monitor_End'
-  displayName: 'Activity Monitoring'
-  jobs:
-  - job: 'Scan'
-    steps:
-    - task: Bash@3
-      displayName: 'Pipeline Enforcer End'
-      env:
-        AQUA_KEY: $(AQUA_KEY)
-        AQUA_SECRET: $(AQUA_SECRET)
-      inputs:
-        targetType: 'inline'
-        script: |
-          ./pipeline-enforcer ci end
+      displayName: Aqua scanner  
 
 - stage: 'Deploy'
   displayName: 'Deploy the container'
-  dependsOn: Monitor_End
+  dependsOn: Scan
   jobs:
   - deployment: Deploy
     displayName: Deploy the container
