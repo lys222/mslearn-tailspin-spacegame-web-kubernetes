@@ -72,7 +72,7 @@ stages:
               --aqua-key $(AQUA_KEY) \
               --aqua-secret $(AQUA_SECRET) \
               --cspm-url https://asia-1.api.cloudsploit.com \
-              --artifact-path  $(Build.SourcesDirectory)/bin/$(leaderboardRepository)
+              --artifact-path  manifests
             
               # The docker image name:tag of the newly built image
               # --artifact-path  my-image-name:${versionEnv}        
@@ -118,7 +118,7 @@ stages:
 
 - stage: 'Deploy'
   displayName: 'Deploy the container'
-  dependsOn: Build
+  dependsOn: Scan
   jobs:
   - deployment: Deploy
     displayName: Deploy the container
