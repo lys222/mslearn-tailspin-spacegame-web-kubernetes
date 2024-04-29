@@ -54,6 +54,18 @@ stages:
     - publish: '$(Build.SourcesDirectory)/manifests'
       artifact: manifests
 
+    - task: Bash@3
+      displayName: Save Docker Image
+      inputs:
+        targetType: 'inline'
+        script: |
+          docker save $(leaderboardRepository):$(tag) -o $(Build.SourcesDirectory)/$(leaderboardRepository).tar
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/$(leaderboardRepository).tar'
+        artifact: 'MY_ARTIFACT'
+        publishLocation: 'pipeline'
+
     - task: CmdLine@2
       displayName: "Manifest Generation"
       inputs: 
