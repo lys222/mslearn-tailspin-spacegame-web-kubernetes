@@ -51,20 +51,21 @@ stages:
         tags: |
           $(tag)
 
-    - publish: '$(Build.SourcesDirectory)/manifests'
-      artifact: manifests
-
     - task: Bash@3
       displayName: Save Docker Image
       inputs:
         targetType: 'inline'
         script: |
-          docker save lyscr222.azurecr.io/$(leaderboardRepository):$(tag) -o $(leaderboardRepository).tar
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(leaderboardRepository).tar'
-        artifact: manifests
-        publishLocation: 'pipeline'
+          docker save lyscr222.azurecr.io/$(leaderboardRepository):$(tag) -o $(Build.SourcesDirectory)/manifests/$(leaderboardRepository).tar
+
+    # - task: PublishPipelineArtifact@1
+    #   inputs:
+    #     targetPath: '$(leaderboardRepository).tar'
+    #     artifact: manifests
+    #     publishLocation: 'pipeline'
+
+    - publish: '$(Build.SourcesDirectory)/manifests'
+      artifact: manifests
 
     - task: CmdLine@2
       displayName: "Manifest Generation"
