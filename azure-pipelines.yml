@@ -59,11 +59,11 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          docker save lyscr222.azurecr.io/$(leaderboardRepository):$(tag) -o $(Build.SourcesDirectory)/$(leaderboardRepository).tar
+          docker save lyscr222.azurecr.io/$(leaderboardRepository):$(tag) -o $(leaderboardRepository).tar
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Build.SourcesDirectory)/$(leaderboardRepository).tar'
-        artifact: 'MY_ARTIFACT'
+        targetPath: '$(leaderboardRepository).tar'
+        artifact: manifests
         publishLocation: 'pipeline'
 
     - task: CmdLine@2
